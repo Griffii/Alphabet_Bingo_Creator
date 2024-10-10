@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bingo Sheet Wizard</title>
+    <HTA:APPLICATION
+        ID="BingoSheetApp"
+        APPLICATIONNAME="Bingo Sheet Creator"
+        BORDER="thin"
+        CAPTION="yes"
+        SHOWINTASKBAR="no"
+        SINGLEINSTANCE="yes"
+        WINDOWSTATE="normal"
+        SCROLL="no"
+        MAXIMIZEBUTTON="no"
+        MINIMIZEBUTTON="no">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            height: auto;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h3 {
+            font-size: 22px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 16px;
+            color: #555;
+            margin-left: 10px;
+        }
+
+        input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        button {
+            margin-top: 30px;
+            padding: 12px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        select {
+            margin-top: 5px;
+            font-size: 16px;
+            padding: 5px;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 10px;
+            color: #999;
+            margin-top: 20px; /* Increased margin to create space */
+        }
+    </style>
+
+    <script>
+        function submitSelection() {
+            var radios = document.getElementsByName('selection');
+            var selectedValue = '';
+            for (var i = 0; i < radios.length; i++) {
+                if (radios[i].checked) {
+                    selectedValue = radios[i].value;
+                    break;
+                }
+            }
+
+            // Get the selected number of pages
+            var numPages = document.getElementById("pageCount").value;
+
+            // Write the selected options to "SelectionResult.txt"
+            var fso = new ActiveXObject("Scripting.FileSystemObject");
+            var tempFile = fso.CreateTextFile("SelectionResult.txt", true);
+            tempFile.WriteLine(selectedValue);  // Write Uppercase or Lowercase
+            tempFile.WriteLine(numPages);       // Write the number of pages
+            tempFile.Close();
+
+            // Close the HTA window
+            window.close();
+        }
+
+        function centerWindow() {
+            var screenWidth = screen.width;
+            var screenHeight = screen.height;
+            var windowWidth = 370;  // Increased width
+            var windowHeight = 380; // Increased height for extra content
+
+            var left = (screenWidth - windowWidth) / 2;
+            var top = (screenHeight - windowHeight) / 2;
+
+            // Resize and move the window to the center of the screen
+            window.resizeTo(windowWidth, windowHeight);
+            window.moveTo(left, top);
+        }
+
+        // Call the function to center the window when the page loads
+        window.onload = centerWindow;
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <h3>Bingo Sheet Type</h3>
+
+        <div>
+            <input type="radio" id="uppercase" name="selection" value="Uppercase" checked>
+            <label for="uppercase">Uppercase</label><br>
+
+            <input type="radio" id="lowercase" name="selection" value="Lowercase">
+            <label for="lowercase">Lowercase</label><br><br>
+
+            <label for="pageCount">How many pages do you want to print?<br>(each page has 6 bingo cards):</label><br>
+
+            <!-- Drop-down menu moved to a new line -->
+            <select id="pageCount">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+            </select><br>
+
+            <button onclick="submitSelection()">OK</button>
+        </div>
+
+        <footer>
+            &copy; Taiyaki Sensei's Bingo Creator
+        </footer>
+    </div>
+
+</body>
+</html>
